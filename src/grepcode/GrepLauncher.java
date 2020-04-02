@@ -6,23 +6,24 @@ import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 public class GrepLauncher {
 
-    @Option(name = "-r", metaVar = "", required = false, usage = "Regular expression")
+    @Option(name = "-r", usage = "Regular expression")
     private Pattern reg;
 
-    @Option(name = "-v", metaVar = "", required = false, usage = "Invert condition of filtration")
-    private int invert = 1;
+    @Option(name = "-v", usage = "Invert condition of filtration")
+    private boolean invert;
 
-    @Option(name = "-i", metaVar = "", required = false, usage = "Ignore word register")
-    private int ignore = 1;
+    @Option(name = "-i", usage = "Ignore word register")
+    private boolean ignore;
 
-    @Argument(required = true, metaVar = "WordForFiltration", usage = "Word for search")
+    @Argument(required = true, metaVar = "Word", usage = "Word for search")
     private String word;
 
-    @Argument(required = true, metaVar = "InputName", usage = "Input file name")
+    @Argument(required = true, metaVar = "InputName", index = 1, usage = "Input file name")
     private String inputFileName;
 
 
@@ -42,9 +43,12 @@ public class GrepLauncher {
             return;
         }
 
-        Grep grep = new Grep(word, inputFileName);
+        Grep grep = new Grep(reg, invert, ignore);
         try {
-            grep.find(reg, invert, ignore);
+            ArrayList<String> result = grep.find(word, inputFileName);
+            for (String s : result) {
+                System.out.println(s);
+            }
         } catch (IOException e) {
             System.err.println(e.getMessage());
         }
