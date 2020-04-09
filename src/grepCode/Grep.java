@@ -1,6 +1,9 @@
-package grepcode;
+package grepCode;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.FileReader;
+
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 import java.util.ArrayList;
@@ -25,44 +28,40 @@ public class Grep {
         if (reg != null) {
             if (!invert) {
                 if (!ignore) {
-                    while (reader.readLine() != null) {
-                        line = reader.readLine();
+                    while ((line = reader.readLine()) != null) {
                         Matcher matcher = reg.matcher(line);
                         if (matcher.find()) {
-                            res.add(i, line);
-                            i++;
+                            res.add(line);
+                            //i++;
                         }
                     }
                 }
                 else {
-                    while (reader.readLine() != null) {
-                        line = reader.readLine().toLowerCase();
-                        Matcher matcher = reg.matcher(line);
+                    while ((line = reader.readLine()) != null) {
+                        Matcher matcher = reg.matcher(line.toLowerCase()); //Can be a mistake
                         if (matcher.find()) {
-                            res.add(i, line);
-                            i++;
+                            res.add(line);
+                            //i++;
                         }
                     }
                 }
             }
             else {
                 if (!ignore) {
-                    while (reader.readLine() != null) {
-                        line = reader.readLine();
+                    while ((line = reader.readLine()) != null) {
                         Matcher matcher = reg.matcher(line);
                         if (!matcher.find()) {
-                            res.add(i, line);
-                            i++;
+                            res.add(line);
+                            //i++;
                         }
                     }
                 }
                 else {
-                    while (reader.readLine() != null) {
-                        line = reader.readLine().toLowerCase();
-                        Matcher matcher = reg.matcher(line);
+                    while ((line = reader.readLine()) != null) {
+                        Matcher matcher = reg.matcher(line.toLowerCase()); //Can be a mistake
                         if (!matcher.find()) {
-                            res.add(i, line);
-                            i++;
+                            res.add(line);
+                            //i++;
                         }
                     }
                 }
@@ -73,17 +72,16 @@ public class Grep {
                 if (!ignore) {
                     while ((line = reader.readLine()) != null) {
                         if (line.contains(word)) {
-                            res.add(i, line);
-                            i++;
+                            res.add(line);
+                            //i++;
                         }
                     }
                 }
                 else {
-                    while (reader.readLine() != null) {
-                        line = reader.readLine().toLowerCase();
-                        if (line.contains(word)) {
-                            res.add(i, line);
-                            i++;
+                    while ((line = reader.readLine()) != null) {
+                        if (line.toLowerCase().contains(word.toLowerCase())) {//Can be a mistake
+                            res.add(line);
+                            //i++;
                         }
                     }
                 }
@@ -92,17 +90,16 @@ public class Grep {
                 if (!ignore) {
                     while ((line = reader.readLine()) != null) {
                         if (!line.contains(word)) {
-                            res.add(i, line);
-                            i++;
+                            res.add(line);
+                            //i++;
                         }
                     }
                 }
                 else {
-                    while (reader.readLine() != null) {
-                        line = reader.readLine().toLowerCase();
-                        if (!line.contains(word)) {
-                            res.add(i, line);
-                            i++;
+                    while ((line = reader.readLine()) != null) {
+                        if (!line.toLowerCase().contains(word.toLowerCase())) {
+                            res.add(line);
+                            //i++;
                         }
                     }
                 }
@@ -112,8 +109,6 @@ public class Grep {
     }
 }
 /* 1) Неправильная работа -i (выводятся строки в нижнем регистре);
-   2) Приложение не выводит одинаковые строки;
-   3)* (Возможно) Неправильная работа REGEX;
-   4) Неправильная работа -v (выводит не все строки);
-   5) Доделать тесты;
+   2)* (Возможно) Неправильная работа REGEX;
+   3) Доделать тесты;
  */
