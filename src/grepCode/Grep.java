@@ -32,16 +32,14 @@ public class Grep {
                         Matcher matcher = reg.matcher(line);
                         if (matcher.find()) {
                             res.add(line);
-                            //i++;
                         }
                     }
                 }
                 else {
                     while ((line = reader.readLine()) != null) {
-                        Matcher matcher = reg.matcher(line.toLowerCase()); //Can be a mistake
+                        Matcher matcher = reg.matcher(line.toLowerCase());
                         if (matcher.find()) {
                             res.add(line);
-                            //i++;
                         }
                     }
                 }
@@ -52,16 +50,14 @@ public class Grep {
                         Matcher matcher = reg.matcher(line);
                         if (!matcher.find()) {
                             res.add(line);
-                            //i++;
                         }
                     }
                 }
                 else {
                     while ((line = reader.readLine()) != null) {
-                        Matcher matcher = reg.matcher(line.toLowerCase()); //Can be a mistake
+                        Matcher matcher = reg.matcher(line.toLowerCase());
                         if (!matcher.find()) {
                             res.add(line);
-                            //i++;
                         }
                     }
                 }
@@ -73,15 +69,13 @@ public class Grep {
                     while ((line = reader.readLine()) != null) {
                         if (line.contains(word)) {
                             res.add(line);
-                            //i++;
                         }
                     }
                 }
                 else {
                     while ((line = reader.readLine()) != null) {
-                        if (line.toLowerCase().contains(word.toLowerCase())) {//Can be a mistake
+                        if (line.toLowerCase().contains(word.toLowerCase())) {
                             res.add(line);
-                            //i++;
                         }
                     }
                 }
@@ -91,7 +85,6 @@ public class Grep {
                     while ((line = reader.readLine()) != null) {
                         if (!line.contains(word)) {
                             res.add(line);
-                            //i++;
                         }
                     }
                 }
@@ -99,7 +92,6 @@ public class Grep {
                     while ((line = reader.readLine()) != null) {
                         if (!line.toLowerCase().contains(word.toLowerCase())) {
                             res.add(line);
-                            //i++;
                         }
                     }
                 }
@@ -108,7 +100,3 @@ public class Grep {
         return res;
     }
 }
-/* 1) Неправильная работа -i (выводятся строки в нижнем регистре);
-   2)* (Возможно) Неправильная работа REGEX;
-   3) Доделать тесты;
- */
