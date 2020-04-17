@@ -37,8 +37,9 @@ public class Grep {
                 }
                 else {
                     while ((line = reader.readLine()) != null) {
-                        Matcher matcher = reg.matcher(line.toLowerCase());
-                        if (matcher.find()) {
+                            Matcher matcher =
+                                    Pattern.compile(reg.toString(), Pattern.CASE_INSENSITIVE & Pattern.UNICODE_CASE).matcher(line.toLowerCase());
+                            if (matcher.find()) {
                             res.add(line);
                         }
                     }
@@ -55,7 +56,8 @@ public class Grep {
                 }
                 else {
                     while ((line = reader.readLine()) != null) {
-                        Matcher matcher = reg.matcher(line.toLowerCase());
+                        Matcher matcher =
+                                Pattern.compile(reg.toString(), Pattern.CASE_INSENSITIVE & Pattern.UNICODE_CASE).matcher(line.toLowerCase());
                         if (!matcher.find()) {
                             res.add(line);
                         }
