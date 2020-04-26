@@ -14,12 +14,12 @@ public class GrepTest {
 
     @Test
     public void find() throws IOException {
-        Grep grep = new Grep(null, false, false);
+        Grep grep = new Grep(false, false, false);
         ArrayList<String> test = new ArrayList<>();
         test.add("Не слово,");
         assertEquals(test, grep.find("слово", "input\\In1.txt"));
 
-        grep = new Grep(null, true, false);
+        grep = new Grep(false, true, false);
         test.clear();
         test.add("Слово");
         test.add("Но");
@@ -28,7 +28,7 @@ public class GrepTest {
         test.add("Слово!");
         assertEquals(test, grep.find("слово", "input\\In1.txt"));
 
-        grep = new Grep(null, false, true);
+        grep = new Grep(false, false, true);
         test.clear();
         test.add("Слово");
         test.add("Не слово,");
@@ -38,22 +38,21 @@ public class GrepTest {
         assertEquals(test, grep.find("Слово", "input\\In1.txt"));
         assertEquals(test, grep.find("СЛОВО", "input\\In1.txt"));
 
-        grep = new Grep(null, true, true);
+        grep = new Grep(false, true, true);
         test.clear();
         test.add("Но");
         test.add("Есть");
         assertEquals(test, grep.find("слово", "input\\In1.txt"));
 
-        Pattern pattern = Pattern.compile("[0-9]+");
-        grep = new Grep(pattern,false,false);
+        grep = new Grep(true,false,false);
         test.clear();
         test.add("123");
         test.add("Сушку34");
         test.add("Да так 82");
         test.add("0099882");
-        assertEquals(test, grep.find("Любое слово", "input\\In2.txt"));
+        assertEquals(test, grep.find("[0-9]+", "input\\In2.txt"));
 
-        grep = new Grep(pattern, true, false);
+        grep = new Grep(true, true, false);
         test.clear();
         test.add("Шла Саша");
         test.add("По шоссе");
@@ -61,17 +60,16 @@ public class GrepTest {
         test.add("Корабли лавировали");
         test.add("Лавировали");
         test.add("Не вылавировали");
-        assertEquals(test, grep.find("Любое слово", "input\\In2.txt"));
+        assertEquals(test, grep.find("[0-9]+", "input\\In2.txt"));
 
-        pattern = Pattern.compile("не(?=\\sвылавировали)|корабли(?=\\sлавировали)");
-        grep = new Grep(pattern, false, true );
+        grep = new Grep(true, false, true );
         test.clear();
         test.add("Корабли лавировали");
         test.add("Не вылавировали");
-        assertEquals(test, grep.find("Любое слово", "input\\In2.txt"));
+        assertEquals(test, grep.find("не(?=\\sвылавировали)|корабли(?=\\sлавировали)", "input\\In2.txt"));
 
-        grep = new Grep(pattern, true, true);
-        test.clear();;
+        grep = new Grep(true, true, true);
+        test.clear();
         test.add("Шла Саша");
         test.add("По шоссе");
         test.add("123");
@@ -80,6 +78,6 @@ public class GrepTest {
         test.add("Лавировали");
         test.add("Да так 82");
         test.add("0099882");
-        assertEquals(test, grep.find("Любое слово", "input\\In2.txt"));
+        assertEquals(test, grep.find("не(?=\\sвылавировали)|корабли(?=\\sлавировали)", "input\\In2.txt"));
     }
 }

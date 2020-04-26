@@ -1,4 +1,4 @@
-package grepCode;
+package grepCode;   
 
 import org.kohsuke.args4j.Argument;
 import org.kohsuke.args4j.CmdLineException;
@@ -8,12 +8,11 @@ import org.kohsuke.args4j.Option;
 import java.io.IOException;
 
 import java.util.ArrayList;
-import java.util.regex.Pattern;
 
 public class GrepLauncher {
 
     @Option(name = "-r", usage = "Regular expression")
-    private Pattern reg;
+    private boolean reg;
 
     @Option(name = "-v", usage = "Invert condition of filtration")
     private boolean invert;
@@ -45,6 +44,7 @@ public class GrepLauncher {
         }
 
         Grep grep = new Grep(reg, invert, ignore);
+
         try {
             ArrayList<String> result = grep.find(word, inputFileName);
             for (String s : result) {

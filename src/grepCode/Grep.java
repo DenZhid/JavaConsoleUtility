@@ -9,96 +9,50 @@ import java.util.regex.Matcher;
 import java.util.ArrayList;
 
 public class Grep {
-
-    private final Pattern reg;
+    private final boolean reg;
     private final boolean invert;
     private final boolean ignore;
 
-    public Grep (Pattern reg, boolean invert, boolean ignore) {
+    public Grep(boolean reg, boolean invert, boolean ignore) {
         this.reg = reg;
         this.invert = invert;
         this.ignore = ignore;
     }
 
     public ArrayList<String> find(String word, String inputFileName) throws IOException {
-        BufferedReader reader = new BufferedReader(new FileReader(inputFileName));
-        String line;
+        Pattern searchExpr;
+        if (!reg) {
+            if (!ignore) {
+                searchExpr = Pattern.compile(Pattern.quote(word));
+            } else {
+                searchExpr = Pattern.compile(Pattern.quote(word), Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
+            }
+        } else {
+            if (!ignore) {
+                searchExpr = Pattern.compile(word);
+            } else {
+                searchExpr = Pattern.compile(word, Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
+            }
+        }
         ArrayList<String> res = new ArrayList<>();
-        int i = 0;
-        if (reg != null) {
+        String line;
+        try (BufferedReader reader = new BufferedReader(new FileReader(inputFileName))) {
             if (!invert) {
-                if (!ignore) {
-                    while ((line = reader.readLine()) != null) {
-                        Matcher matcher = reg.matcher(line);
-                        if (matcher.find()) {
-                            res.add(line);
-                        }
+                while ((line = reader.readLine()) != null) {
+                    Matcher matcher = searchExpr.matcher(line);
+                    if (matcher.find()) {
+                        res.add(line);
                     }
                 }
-                else {
-                    while ((line = reader.readLine()) != null) {
-                            Matcher matcher =
-                                    Pattern.compile(reg.toString(), Pattern.CASE_INSENSITIVE & Pattern.UNICODE_CASE).matcher(line.toLowerCase());
-                            if (matcher.find()) {
-                            res.add(line);
-                        }
+            } else {
+                while ((line = reader.readLine()) != null) {
+                    Matcher matcher = searchExpr.matcher(line);
+                    if (!matcher.find()) {
+                        res.add(line);
                     }
                 }
             }
-            else {
-                if (!ignore) {
-                    while ((line = reader.readLine()) != null) {
-                        Matcher matcher = reg.matcher(line);
-                        if (!matcher.find()) {
-                            res.add(line);
-                        }
-                    }
-                }
-                else {
-                    while ((line = reader.readLine()) != null) {
-                        Matcher matcher =
-                                Pattern.compile(reg.toString(), Pattern.CASE_INSENSITIVE & Pattern.UNICODE_CASE).matcher(line.toLowerCase());
-                        if (!matcher.find()) {
-                            res.add(line);
-                        }
-                    }
-                }
-            }
+            return res;
         }
-        else {
-            if (!invert) {
-                if (!ignore) {
-                    while ((line = reader.readLine()) != null) {
-                        if (line.contains(word)) {
-                            res.add(line);
-                        }
-                    }
-                }
-                else {
-                    while ((line = reader.readLine()) != null) {
-                        if (line.toLowerCase().contains(word.toLowerCase())) {
-                            res.add(line);
-                        }
-                    }
-                }
-            }
-            else {
-                if (!ignore) {
-                    while ((line = reader.readLine()) != null) {
-                        if (!line.contains(word)) {
-                            res.add(line);
-                        }
-                    }
-                }
-                else {
-                    while ((line = reader.readLine()) != null) {
-                        if (!line.toLowerCase().contains(word.toLowerCase())) {
-                            res.add(line);
-                        }
-                    }
-                }
-            }
-        }
-        return res;
     }
 }
