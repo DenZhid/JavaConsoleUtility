@@ -21,37 +21,25 @@ public class Grep {
 
     public ArrayList<String> find(String word, String inputFileName) throws IOException {
         Pattern searchExpr;
-        if (!reg) {
-            if (!ignore) {
-                searchExpr = Pattern.compile(Pattern.quote(word));
-            } else {
-                searchExpr = Pattern.compile(Pattern.quote(word), Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
-            }
+        String regex;
+        if (reg)  {
+            regex = word;
+        }
+        else regex = Pattern.quote(word);
+        if (!ignore) {
+            searchExpr = Pattern.compile(regex);
         } else {
-            if (!ignore) {
-                searchExpr = Pattern.compile(word);
-            } else {
-                searchExpr = Pattern.compile(word, Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
-            }
+            searchExpr = Pattern.compile(regex, Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
         }
         ArrayList<String> res = new ArrayList<>();
         String line;
         try (BufferedReader reader = new BufferedReader(new FileReader(inputFileName))) {
-            if (!invert) {
                 while ((line = reader.readLine()) != null) {
                     Matcher matcher = searchExpr.matcher(line);
-                    if (matcher.find()) {
+                    if (matcher.find() != invert) {
                         res.add(line);
                     }
                 }
-            } else {
-                while ((line = reader.readLine()) != null) {
-                    Matcher matcher = searchExpr.matcher(line);
-                    if (!matcher.find()) {
-                        res.add(line);
-                    }
-                }
-            }
             return res;
         }
     }
